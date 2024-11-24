@@ -39,11 +39,8 @@ router.post('/:productId/comments', async (req, res) => {
 
 router.put('/:productId/comments/:commentId', async (req, res) => {
     try {
-      const product = await Superstore.findById(req.params.productId);
+      const product = await Product.findById(req.params.productId);
       const comment = product.comments.id(req.params.commentId);
-      if (!product.customer.equals(req.user._id)) {
-        return res.status(403).send("You're not allowed to do that!");
-      }
       comment.text = req.body.text;
       await product.save();
       res.status(200).json({ message: 'Ok' });
@@ -55,10 +52,7 @@ router.put('/:productId/comments/:commentId', async (req, res) => {
 
 router.delete('/:productId/comments/:commentId', async (req, res)=>{
     try{
-        const product = await Superstore.findById(req.params.productId);
-        if (!product.customer.equals(req.user._id)) {
-            return res.status(403).send("You're not allowed to do that!");
-        }
+        const product = await Product.findById(req.params.productId);
         product.comments.remove({_id: req.params.commentId});
         await product.save();
         res.status(200).json({ message: 'Comment deleted' });

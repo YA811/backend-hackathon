@@ -11,12 +11,25 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 // models/Product.js
+
+const commentSchema = new mongoose.Schema(
+    {
+      text: {
+        type: String,
+        required: true
+      },
+      author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    },
+    { timestamps: true }
+);
+
 const productSchema = new mongoose.Schema({
   product_id: { type: String, unique: true },
   category: String,
   sub_category: String,
   product_name: String,
   product_cost_to_consumer: Number,
+  comments: [commentSchema],
 });
 
 const Product = mongoose.model('Product', productSchema);
